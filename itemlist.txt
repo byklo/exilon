@@ -1,0 +1,12 @@
+Paint-less, grade-less
+★ Bayonet
+★ StatTrak™ Bayonet
+
+Model	Variant	Grade	Stattrak
+★ Bayonet,	Night,	Minimal Wear,	no
+★ StatTrak™ Bayonet,	Night,	Minimal Wear,	yes
+AK-47,	Fire Serpent,	Minimal Wear,	no
+AWP,	Graphite,	Minimal Wear,	no
+Glock-18,	Fade,	Minimal Wear,	no
+P90,	Death by Kitty,	Minimal Wear,	no
+P90,	Death by Kitty,	Minimal Wear,	yes

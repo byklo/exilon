@@ -57,7 +57,8 @@ public class Scraper {
 
 		// currency = CDN = 20
 		// /render shoots out JSON object
-		url += "/render?&currency=20";
+		// you can specify how many listings you want with count=n
+		url += "/render?&currency=20&count=20";
 
 		return url;
 	}
