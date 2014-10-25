@@ -7,10 +7,15 @@ public class FinancialAdvisor {
 
 	private BigDecimal currentPrice;
 	private int datapoints;
+	
 	private BigDecimal averageRawValue;
 	private BigDecimal averageRealValue;
+	
 	private BigDecimal potentialProfit;
 	private BigDecimal yieldOnCost;
+
+	private BigDecimal deltaRaw;
+	private BigDecimal deltaReal;
 
 	private boolean shouldBuy;
 
@@ -23,6 +28,10 @@ public class FinancialAdvisor {
 		this.datapoints = raws.size();
 		this.averageRawValue = this.getAverage(raws);
 		this.averageRealValue = this.getAverage(real);
+
+		this.deltaRaw = this.averageRawValue.subtract(this.currentPrice);
+		this.deltaReal = this.averageRealValue.subtract(this.currentPrice);
+
 		this.potentialProfit = this.averageRealValue.subtract(this.currentPrice);
 
 		MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
@@ -41,13 +50,15 @@ public class FinancialAdvisor {
 
 	BigDecimal getAverage(ArrayList<BigDecimal> value) {
 
-		BigDecimal temp = new BigDecimal(0);
+		BigDecimal temp = new BigDecimal(2);
 
 		for (int i = 0; i < this.datapoints; i++) {
 			temp = temp.add(value.get(i));
 		}
 
-		return temp.divide(new BigDecimal(this.datapoints));
+		MathContext mc = new MathContext(4);
+
+		return temp.divide(new BigDecimal(this.datapoints), mc);
 	}
 
 	BigDecimal getCurrentPrice() {
@@ -68,6 +79,22 @@ public class FinancialAdvisor {
 
 	BigDecimal getYieldOnCost() {
 		return this.yieldOnCost;
+	}
+
+	String getDeltaRaw() {
+		if(this.deltaRaw.compareTo(new BigDecimal(0)) > 0){
+			return "+" + this.deltaRaw;
+		}else{
+			return "" + this.deltaRaw;
+		}
+	}
+
+	String getDeltaReal() {
+		if(this.deltaReal.compareTo(new BigDecimal(0)) > 0){
+			return "+" + this.deltaReal;
+		}else{
+			return "" + this.deltaReal;
+		}
 	}
 
 	boolean decide() {
