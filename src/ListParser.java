@@ -20,11 +20,15 @@ public class ListParser {
 
 			while( (line = reader.readLine()) != null ) {
 
-				String[] attr = line.split("\t");
+				if(!line.trim().isEmpty()){
 
-				Item newItem = new Item(attr[0], attr[1], attr[2], attr[3]);
+					String[] attr = line.split("\t");
 
-				items.add(newItem);
+					Item newItem = new Item(attr[0], attr[1], attr[2], attr[3]);
+
+					items.add(newItem);
+
+				}
 
 			}
 
