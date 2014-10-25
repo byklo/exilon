@@ -25,8 +25,7 @@ public class Scraper {
 
 	String spaceFormat(String input) {
 
-		return "";
-
+		return input.replace(" ", "%20");
 	}
 
 	String generateUrl(Item item) {
@@ -44,15 +43,15 @@ public class Scraper {
 		}
 
 		// model
-		url += item.model;
+		url += this.spaceFormat(item.model);
 		url += "%20%7C%20";
 
 		// variant
-		url += item.variant;
+		url += this.spaceFormat(item.variant);
 		url += "%20%28";
 
 		// grade
-		url += item.grade;
+		url += this.spaceFormat(item.grade);
 		url += "%29";
 
 		// currency = CDN = 20
@@ -83,7 +82,6 @@ public class Scraper {
 		}
 
 		return jObject;
-
 	}
 
 	Document getHtmlReponse(JsonObject jsonReponseObject) {
@@ -106,7 +104,6 @@ public class Scraper {
 		String rawData = priceNodes.html();
 
 		return rawData;
-
 	}
 
 }
