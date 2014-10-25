@@ -5,8 +5,8 @@ public class Stockr {
 	public static void main (String[] args) {
 
 		boolean		LOOP		= true;
-		boolean		NOTIFY		= false;
-		int			INTERVAL	= 500;
+		boolean		NOTIFY		= true;
+		int			INTERVAL	= 100;
 		String		LISTFILE	= "./itemlist.txt";
 
 		ListParser lp = new ListParser();
