@@ -29,7 +29,7 @@ public class Scraper {
 
 	String generateUrl(Item item) {
 
-		int NUM_LISTINGS = 5;
+		int NUM_LISTINGS = 3;
 
 		String url = "http://steamcommunity.com/market/listings/";
 

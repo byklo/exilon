@@ -4,35 +4,41 @@ public class Stockr {
 
 	public static void main (String[] args) {
 
-		int INTERVAL = 1000;
-		String LISTFILE = "./itemlist.txt";
+		boolean		LOOP		= true;
+		boolean		NOTIFY		= false;
+		int			INTERVAL	= 500;
+		String		LISTFILE	= "./itemlist.txt";
 
 		ListParser lp = new ListParser();
 		ArrayList<Item> items = lp.parse(LISTFILE);
-
-		// Pass "items" to Scraper to get price listings
-
 		Scraper alfred = new Scraper();
+		int runtimes = 0;
 
-		for (Item item : items) {
+		do {
 
-			Prices itemPrices = alfred.getPrices(item);
+			for (Item item : items) {
 
-			FinancialAdvisor tips = new FinancialAdvisor(itemPrices);
+				Prices itemPrices = alfred.getPrices(item);
 
-			if(tips.decide()){
-				notify(item, tips);
-			}else{
-				info(item, tips);
+				FinancialAdvisor tips = new FinancialAdvisor(itemPrices);
+
+				if(tips.decide()){
+					notify(item, tips);
+				}else if(NOTIFY){
+					info(item, tips);
+				}
+
+				try {
+					Thread.sleep(1200);
+				} catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+
 			}
 
-			try {
-				Thread.sleep(1200);
-			} catch(InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
+			System.out.println("Number of times ran: " + ++runtimes);
 
-		}
+		} while (LOOP);
 
 	}
 
@@ -41,10 +47,10 @@ public class Stockr {
 		System.out.println("");
 		System.out.println(item.model + "\t\t" + item.variant + "\t\t" + item.grade);
 		System.out.println("---------------------------------------------------------------");
-		System.out.println("Stattrak:\t" + item.stattrak);
-		System.out.println("Current Price:\t" + tips.getCurrentPrice());
-		System.out.println("Average Raw Value:\t" + tips.getAverageRawValue());
-		System.out.println("Average Real Value:\t" + tips.getAverageRealValue());
+		System.out.println("Stattrak:\t\t"			+ item.stattrak);
+		System.out.println("Current Price:\t\t"		+ tips.getCurrentPrice());
+		System.out.println("Average Raw Value:\t"	+ tips.getAverageRawValue()		+ "\t" + tips.getDeltaRaw()		);
+		System.out.println("Average Real Value:\t"	+ tips.getAverageRealValue()	+ "\t" + tips.getDeltaReal()	);
 
 	}
 
@@ -54,8 +60,8 @@ public class Stockr {
 		System.out.println("DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL");
 		
 		info(item, tips);
-		System.out.println("Potential Profit:\t" + tips.getPotentialProfit());
-		System.out.println("Yield on Cost:\t" + tips.getYieldOnCost());
+		System.out.println("Potential Profit:\t"	+ tips.getPotentialProfit());
+		System.out.println("Yield on Cost:\t"		+ tips.getYieldOnCost());
 
 		System.out.println("DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL");
 	}
