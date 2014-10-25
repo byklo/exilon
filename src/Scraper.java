@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,20 +16,20 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.math.BigDecimal;
 
 public class Scraper {
 
-	//BigDecimal[] getPrices() {
-//
-	//}
-
-	String spaceFormat(String input) {
+	String formatSpaces(String input) {
 
 		return input.replace(" ", "%20");
 	}
 
+
 	String generateUrl(Item item) {
+
+		int NUM_LISTINGS = 5;
 
 		String url = "http://steamcommunity.com/market/listings/";
 
@@ -43,24 +44,25 @@ public class Scraper {
 		}
 
 		// model
-		url += this.spaceFormat(item.model);
+		url += this.formatSpaces(item.model);
 		url += "%20%7C%20";
 
 		// variant
-		url += this.spaceFormat(item.variant);
+		url += this.formatSpaces(item.variant);
 		url += "%20%28";
 
 		// grade
-		url += this.spaceFormat(item.grade);
+		url += this.formatSpaces(item.grade);
 		url += "%29";
 
 		// currency = CDN = 20
 		// /render shoots out JSON object
 		// you can specify how many listings you want with count=n
-		url += "/render?&currency=20&count=20";
+		url += "/render?&currency=20&count=" + NUM_LISTINGS;
 
 		return url;
 	}
+
 
 	JsonObject getJsonResponse(String url) {
 
@@ -84,6 +86,7 @@ public class Scraper {
 		return jObject;
 	}
 
+
 	Document getHtmlReponse(JsonObject jsonReponseObject) {
 
 		Document document = Jsoup.parse( jsonReponseObject.get("results_html").getAsString() );
@@ -91,7 +94,27 @@ public class Scraper {
 		return document;
 	}
 
-	String getRawWithFee(Item item) {
+
+	String formatHtml(String html) {
+
+		return html.replace("CDN$ ", "");
+	}
+
+
+	ArrayList<BigDecimal> getNumbers(String[] priceStrings) {
+
+		ArrayList<BigDecimal> priceNumbers = new ArrayList<BigDecimal>();
+
+		for (String priceString : priceStrings) {
+
+			priceNumbers.add(new BigDecimal(priceString));
+		}
+
+		return priceNumbers;
+	}
+
+
+	Prices getPrices(Item item) {
 
 		String queryUrl = this.generateUrl(item);
 
@@ -99,11 +122,21 @@ public class Scraper {
 
 		Document document = this.getHtmlReponse(jsonReponseObject);
 
-		Elements priceNodes = document.select("span.market_listing_price.market_listing_price_with_fee");
+		Elements rawNodes	= document.select("span.market_listing_price.market_listing_price_with_fee");
+		Elements realNodes	= document.select("span.market_listing_price.market_listing_price_without_fee");
 
-		String rawData = priceNodes.html();
+		String rawPricesList	= formatHtml(rawNodes.html());
+		String realPricesList	= formatHtml(realNodes.html());
 
-		return rawData;
+		String[] rawPriceStrings	= rawPricesList.split("\n");
+		String[] realPriceStrings	= realPricesList.split("\n");
+
+		// System.out.println(Arrays.toString(rawPriceStrings));
+		// System.out.println(Arrays.toString(realPriceStrings));
+
+		Prices prices = new Prices(getNumbers(rawPriceStrings), getNumbers(realPriceStrings));
+
+		return prices;
 	}
 
 }

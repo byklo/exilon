@@ -1,5 +1,4 @@
 ★ Bayonet	Night	Minimal Wear	no
-★ StatTrak™ Bayonet	Night	Minimal Wear	yes
 AK-47	Fire Serpent	Minimal Wear	no
 AWP	Graphite	Minimal Wear	no
 Glock-18	Fade	Minimal Wear	no
