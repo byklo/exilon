@@ -20,13 +20,19 @@ public class ListParser {
 
 			while( (line = reader.readLine()) != null ) {
 
-				if( !line.trim().isEmpty() || !line.substring(0,1).matches("#") ){
+				if( !line.trim().isEmpty() ){
+					
+					if( line.substring(0,1).matches("#") ){
 
-					String[] attr = line.split("\t");
+					}else{
 
-					Item newItem = new Item(attr[0], attr[1], attr[2], attr[3]);
+						String[] attr = line.split("\t");
 
-					items.add(newItem);
+						Item newItem = new Item(attr[0], attr[1], attr[2], attr[3]);
+
+						items.add(newItem);
+
+					}
 
 				}
 

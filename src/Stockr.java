@@ -74,9 +74,8 @@ public class Stockr {
 	public static void info(Item item, FinancialAdvisor tips) {
 
 		System.out.println("");
-		System.out.println(item.model + "\t\t" + item.variant + "\t\t" + item.grade);
-		System.out.println("---------------------------------------------------------------");
-		System.out.println("Stattrak:\t\t"			+ item.stattrak);
+		System.out.println(item.model + "\t\t" + item.variant + "\t\t" + item.grade + "\t\t" + ( item.stattrak.matches("yes") ? "STATTRAK" : "" ) );
+		System.out.println("-------------------------------------------------------------------------");
 		System.out.println("Current Price:\t\t"		+ tips.getCurrentPrice());
 		System.out.println("Average Raw Value:\t"	+ tips.getAverageRawValue()		+ "\tDELTA\t" + tips.getDeltaRaw()		);
 		System.out.println("Average Real Value:\t"	+ tips.getAverageRealValue()	+ "\tDELTA\t" + tips.getDeltaReal()	);
