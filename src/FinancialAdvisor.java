@@ -5,8 +5,10 @@ import java.math.MathContext;
 
 public class FinancialAdvisor {
 
+	private int DATAPOINTS;
+
 	private BigDecimal currentPrice;
-	private int datapoints;
+	private int dataSize;
 	
 	private BigDecimal averageRawValue;
 	private BigDecimal averageRealValue;
@@ -19,13 +21,21 @@ public class FinancialAdvisor {
 
 	private boolean shouldBuy;
 
-	public FinancialAdvisor(Prices prices) {
+	public FinancialAdvisor(Prices prices, int size) {
+
+		this.DATAPOINTS = size;
 
 		ArrayList<BigDecimal> raws = prices.raw;
 		ArrayList<BigDecimal> real = prices.real;
 
 		this.currentPrice = raws.get(0);
-		this.datapoints = raws.size();
+
+		if(raws.size() < this.DATAPOINTS){
+			this.dataSize = raws.size();
+		}else{
+			this.dataSize = this.DATAPOINTS;
+		}
+
 		this.averageRawValue = this.getAverage(raws);
 		this.averageRealValue = this.getAverage(real);
 
@@ -43,22 +53,31 @@ public class FinancialAdvisor {
 
 	boolean judgeByPercentYield() {
 
-		BigDecimal wantedYield = new BigDecimal(0.1);
+		BigDecimal wantedYield = new BigDecimal(0.01);
 
 		return this.yieldOnCost.compareTo(wantedYield) > 0;
 	}
 
 	BigDecimal getAverage(ArrayList<BigDecimal> value) {
 
-		BigDecimal temp = new BigDecimal(2);
+		BigDecimal temp = new BigDecimal(0);
 
-		for (int i = 0; i < this.datapoints; i++) {
+		// System.out.println("");
+		// System.out.print("Dividing... SUM(");
+
+		for (int i = 0; i < this.dataSize; i++) {
+
+			// System.out.print(value.get(i) + " ");
+
 			temp = temp.add(value.get(i));
 		}
 
+		// System.out.print(") by " + new BigDecimal(this.dataSize));
+		// System.out.println("");
+
 		MathContext mc = new MathContext(4);
 
-		return temp.divide(new BigDecimal(this.datapoints), mc);
+		return temp.divide(new BigDecimal(this.dataSize), mc);
 	}
 
 	BigDecimal getCurrentPrice() {
@@ -77,8 +96,8 @@ public class FinancialAdvisor {
 		return this.potentialProfit;
 	}
 
-	BigDecimal getYieldOnCost() {
-		return this.yieldOnCost;
+	String getYieldOnCost() {
+		return this.yieldOnCost.multiply(new BigDecimal(100)) + "%";
 	}
 
 	String getDeltaRaw() {

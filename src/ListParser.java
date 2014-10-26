@@ -20,7 +20,7 @@ public class ListParser {
 
 			while( (line = reader.readLine()) != null ) {
 
-				if(!line.trim().isEmpty()){
+				if( !line.trim().isEmpty() || !line.substring(0,1).matches("#") ){
 
 					String[] attr = line.split("\t");
 

@@ -27,9 +27,9 @@ public class Scraper {
 	}
 
 
-	String generateUrl(Item item) {
+	String generateUrl(Item item, int size) {
 
-		int NUM_LISTINGS = 3;
+		int listingCount = size;
 
 		String url = "http://steamcommunity.com/market/listings/";
 
@@ -57,8 +57,8 @@ public class Scraper {
 
 		// currency = CDN = 20
 		// /render shoots out JSON object
-		// you can specify how many listings you want with count=n
-		url += "/render?&currency=20&count=" + NUM_LISTINGS;
+		// you can specify how many listings you want with count=n 5 IS MINIMUM
+		url += "/render?&currency=20&count=" + listingCount;
 
 		return url;
 	}
@@ -106,7 +106,9 @@ public class Scraper {
 		ArrayList<BigDecimal> priceNumbers = new ArrayList<BigDecimal>();
 
 		for (String priceString : priceStrings) {
-
+			
+			// System.out.println(priceString);
+			
 			priceNumbers.add(new BigDecimal(priceString));
 		}
 
@@ -114,9 +116,9 @@ public class Scraper {
 	}
 
 
-	Prices getPrices(Item item) {
+	Prices getPrices(Item item, int size) {
 
-		String queryUrl = this.generateUrl(item);
+		String queryUrl = this.generateUrl(item, size);
 
 		JsonObject jsonReponseObject = this.getJsonResponse(queryUrl);
 
