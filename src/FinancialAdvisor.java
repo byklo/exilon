@@ -53,9 +53,10 @@ public class FinancialAdvisor {
 
 	boolean judgeByPercentYield() {
 
-		BigDecimal wantedYield = new BigDecimal(0.01);
+		BigDecimal wantedYield = new BigDecimal(0.05);
+		BigDecimal wantedProfit = new BigDecimal(1);
 
-		return this.yieldOnCost.compareTo(wantedYield) > 0;
+		return this.yieldOnCost.compareTo(wantedYield) > 0 && this.potentialProfit.compareTo(wantedProfit) > 0 ;
 	}
 
 	BigDecimal getAverage(ArrayList<BigDecimal> value) {
