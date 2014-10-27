@@ -7,7 +7,7 @@ public class Stockr {
 		int 		LISTINGCOUNT	=	3;
 		boolean		LOOP			=	true;
 		boolean		INFO			=	false;
-		int			INTERVAL		=	1500;
+		int			INTERVAL		=	500;
 		String		LISTFILE		=	"./itemlist.txt";
 
 		try {
@@ -30,7 +30,7 @@ public class Stockr {
 				try {
 					itemPrices = alfred.getPrices(item, LISTINGCOUNT);
 				} catch(NumberFormatException e){
-					infoFail(item);
+					// infoFail(item);
 					continue;
 				}
 
@@ -68,7 +68,7 @@ public class Stockr {
 	public static void infoFail(Item item) {
 
 		System.out.println("");
-		System.out.println("FAIL : Could not fetch prices for " + item.model + " " + item.variant + " " + item.grade);
+		System.out.println("No listings found for " + item.model + " " + item.variant + " " + item.grade + ( item.stattrak.matches("yes") ? " STATTRAK" : "" ) );
 	}
 
 	public static void info(Item item, FinancialAdvisor tips) {
