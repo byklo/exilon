@@ -19,9 +19,12 @@ public class FinancialAdvisor {
 	private BigDecimal deltaRaw;
 	private BigDecimal deltaReal;
 
+	private BigDecimal wantedYield;
+	private BigDecimal wantedProfit;
+
 	private boolean shouldBuy;
 
-	public FinancialAdvisor(Prices prices, int size) {
+	public FinancialAdvisor(Prices prices, int size, BigDecimal wantedYield, BigDecimal wantedProfit) {
 
 		this.DATAPOINTS = size;
 
@@ -47,14 +50,14 @@ public class FinancialAdvisor {
 		MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
 		this.yieldOnCost = this.potentialProfit.divide(this.currentPrice, mc);
 
-		this.shouldBuy = this.judgeByPercentYield();
+		this.wantedYield = wantedYield;
+		this.wantedProfit = wantedProfit;
+
+		this.shouldBuy = this.judgeByPercentYield(wantedYield, wantedProfit);
 
 	}
 
-	boolean judgeByPercentYield() {
-
-		BigDecimal wantedYield = new BigDecimal(0.05);
-		BigDecimal wantedProfit = new BigDecimal(1);
+	boolean judgeByPercentYield(BigDecimal wantedYield, BigDecimal wantedProfit) {
 
 		return this.yieldOnCost.compareTo(wantedYield) > 0 && this.potentialProfit.compareTo(wantedProfit) > 0 ;
 	}

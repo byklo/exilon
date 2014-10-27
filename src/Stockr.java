@@ -1,9 +1,13 @@
 import java.util.ArrayList;
+import java.math.BigDecimal;
 
 public class Stockr {
 
 	public static void main (String[] args) {
 
+		// CONFIG
+		BigDecimal	WANTEDYIELD		=	new BigDecimal(0.01);
+		BigDecimal	WANTEDPROFIT	=	new BigDecimal(0);
 		int 		LISTINGCOUNT	=	3;
 		boolean		LOOP			=	true;
 		boolean		INFO			=	false;
@@ -19,6 +23,7 @@ public class Stockr {
 		ListParser lp = new ListParser();
 		ArrayList<Item> items = lp.parse(LISTFILE);
 		Scraper alfred = new Scraper();
+		Notifier notify = new Notifier();
 		int runtimes = 0;
 
 		do {
@@ -30,16 +35,16 @@ public class Stockr {
 				try {
 					itemPrices = alfred.getPrices(item, LISTINGCOUNT);
 				} catch(NumberFormatException e){
-					// infoFail(item);
+					// notify.fail(item);
 					continue;
 				}
 
-				FinancialAdvisor tips = new FinancialAdvisor(itemPrices, LISTINGCOUNT);
+				FinancialAdvisor tips = new FinancialAdvisor(itemPrices, LISTINGCOUNT, WANTEDYIELD, WANTEDPROFIT);
 
 				if(tips.decide()){
-					notify(item, tips);
+					notify.deal(item, tips);
 				}else if(INFO){
-					info(item, tips);
+					notify.info(item, tips);
 				}
 
 				System.out.print(".");
@@ -63,35 +68,6 @@ public class Stockr {
 
 		} while (LOOP);
 
-	}
-
-	public static void infoFail(Item item) {
-
-		System.out.println("");
-		System.out.println("No listings found for " + item.model + " " + item.variant + " " + item.grade + ( item.stattrak.matches("yes") ? " STATTRAK" : "" ) );
-	}
-
-	public static void info(Item item, FinancialAdvisor tips) {
-
-		System.out.println("");
-		System.out.println(item.model + "\t\t" + item.variant + "\t\t" + item.grade + "\t\t" + ( item.stattrak.matches("yes") ? "STATTRAK" : "" ) );
-		System.out.println("-------------------------------------------------------------------------");
-		System.out.println("Current Price:\t\t"		+ tips.getCurrentPrice());
-		System.out.println("Average Raw Value:\t"	+ tips.getAverageRawValue()		+ "\tDELTA\t" + tips.getDeltaRaw()		);
-		System.out.println("Average Real Value:\t"	+ tips.getAverageRealValue()	+ "\tDELTA\t" + tips.getDeltaReal()	);
-
-	}
-
-	public static void notify(Item item, FinancialAdvisor tips) {
-
-		System.out.println("");
-		System.out.println("DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL");
-		
-		info(item, tips);
-		System.out.println("Potential Profit:\t"	+ tips.getPotentialProfit());
-		System.out.println("Yield on Cost:\t\t"		+ tips.getYieldOnCost());
-
-		System.out.println("DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL DEAL");
 	}
 
 }
