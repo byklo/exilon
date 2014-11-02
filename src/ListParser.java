@@ -42,6 +42,8 @@ public class ListParser {
 
 		}catch(Exception e) {
 
+			System.out.println("Could not read list.");
+
 			e.printStackTrace();
 		
 		}
