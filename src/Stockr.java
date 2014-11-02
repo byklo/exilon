@@ -6,12 +6,12 @@ public class Stockr {
 	public static void main (String[] args) {
 
 		// CONFIG
-		BigDecimal	WANTEDYIELD		=	new BigDecimal(0.01);
-		BigDecimal	WANTEDPROFIT	=	new BigDecimal(0);
+		BigDecimal	WANTEDYIELD		=	new BigDecimal(0.05);
+		BigDecimal	WANTEDPROFIT	=	new BigDecimal(0.5);
 		int 		LISTINGCOUNT	=	3;
 		boolean		LOOP			=	true;
 		boolean		INFO			=	false;
-		int			INTERVAL		=	500;
+		int			INTERVAL		=	750;
 		String		LISTFILE		=	"./itemlist.txt";
 
 		try {
@@ -34,31 +34,33 @@ public class Stockr {
 
 				try {
 					itemPrices = alfred.getPrices(item, LISTINGCOUNT);
-				} catch(NumberFormatException e){
+					
+					FinancialAdvisor tips = new FinancialAdvisor(itemPrices, LISTINGCOUNT, WANTEDYIELD, WANTEDPROFIT);
+
+					if(tips.decide()){
+						notify.deal(item, tips);
+					}else if(INFO){
+						notify.info(item, tips);
+					}
+
+					System.out.print(".");
+
+					try {
+						Thread.sleep(INTERVAL);
+					} catch(InterruptedException e) {
+						Thread.currentThread().interrupt();
+					}
+
+				} catch(NumberFormatException e) {
+					System.out.print("x");
 					// notify.fail(item);
 					continue;
-				}
-
-				FinancialAdvisor tips = new FinancialAdvisor(itemPrices, LISTINGCOUNT, WANTEDYIELD, WANTEDPROFIT);
-
-				if(tips.decide()){
-					notify.deal(item, tips);
-				}else if(INFO){
-					notify.info(item, tips);
-				}
-
-				System.out.print(".");
-
-				try {
-					Thread.sleep(INTERVAL);
-				} catch(InterruptedException e) {
-					Thread.currentThread().interrupt();
 				}
 
 			}
 
 			System.out.println("");
-			System.out.println("Number of times ran: " + ++runtimes);
+			System.out.println("\tn = " + ++runtimes);
 			
 			try {
 				Thread.sleep( 2 * INTERVAL );
