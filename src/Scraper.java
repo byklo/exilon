@@ -80,6 +80,8 @@ public class Scraper {
 
 		} catch(IOException e) {
 
+			System.out.println("Could not connect to URL.");
+
 			e.printStackTrace();
 		}
 
