@@ -1,3 +1,14 @@
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 public class Notifier {
 
 	void info(Item item, FinancialAdvisor tips) {
@@ -28,5 +39,51 @@ public class Notifier {
 		System.out.println("No listings found for " + item.model + " " + item.variant + " " + item.grade + ( item.stattrak.matches("yes") ? " STATTRAK" : "" ) );
 	}
 
+	void text(Item item, FinancialAdvisor tips) {
+
+		final String to		= "4169936118@txt.bell.ca";
+		final String from	= "stockr.ae@gmail.com";
+		final String pswd	= "isthisevenapassword";
+
+		String host = "smtp.gmail.com";
+
+		Properties properties = System.getProperties();
+			properties.put("mail.smtp.auth", "true");
+			properties.put("mail.smtp.starttls.enable", "true");
+			properties.put("mail.smtp.host", host);
+			properties.put("mail.smtp.port", "587");
+
+		Session session = Session.getInstance(properties,
+			new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication("stockr.ae", pswd);
+				}
+			}
+		);
+
+		try {
+
+			Message msg = new MimeMessage(session);
+
+			String content = "STOCKR";
+				content += "\n";
+				content += item.model + " " + item.variant + " " + item.grade + ( item.stattrak.matches("yes") ? " STATTRAK" : "" );
+				content += "\n";
+				content += "Potential Profit:\t"	+ tips.getPotentialProfit();
+				content += "\n";
+				content += "Yield on Cost:\t\t"		+ tips.getYieldOnCost();
+
+			msg.setFrom(new InternetAddress(from));
+			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+			msg.setText(content);
+			Transport.send(msg);
+		
+		} catch (MessagingException e) {
+			
+			System.out.println("Failed to text: " + e);
+
+		}
+
+	}
 
 }

@@ -11,7 +11,7 @@ public class Stockr {
 		int 		LISTINGCOUNT	=	3;
 		boolean		LOOP			=	true;
 		boolean		INFO			=	false;
-		int			INTERVAL		=	750;
+		int			INTERVAL		=	500;
 		String		LISTFILE		=	"./itemlist.txt";
 
 		try {
@@ -39,6 +39,7 @@ public class Stockr {
 
 					if(tips.decide()){
 						notify.deal(item, tips);
+						notify.text(item, tips);
 					}else if(INFO){
 						notify.info(item, tips);
 					}
@@ -50,6 +51,8 @@ public class Stockr {
 					} catch(InterruptedException e) {
 						Thread.currentThread().interrupt();
 					}
+
+					// notify.text(item, tips);
 
 				} catch(NumberFormatException e) {
 					System.out.print("x");
