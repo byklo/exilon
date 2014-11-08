@@ -56,13 +56,14 @@ public class Stockr {
 
 				} catch(NumberFormatException e) {
 
+					System.out.print("x");
+
 					try {
-						Thread.sleep( 4 * INTERVAL );
+						Thread.sleep( 5 * INTERVAL );
 					} catch(InterruptedException ie) {
 						Thread.currentThread().interrupt();
 					}
 
-					System.out.print("x");
 					// notify.fail(item);
 					continue;
 				}

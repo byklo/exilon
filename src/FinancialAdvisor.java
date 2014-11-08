@@ -117,7 +117,7 @@ public class FinancialAdvisor {
 		if(this.deltaBreakEven.compareTo(new BigDecimal(0)) > 0){
 			return "+" + this.deltaBreakEven;
 		}else{
-			return "-" + this.deltaBreakEven;
+			return "" + this.deltaBreakEven;
 		}
 	}
 
