@@ -55,6 +55,13 @@ public class Stockr {
 					// notify.text(item, tips);
 
 				} catch(NumberFormatException e) {
+
+					try {
+						Thread.sleep( 4 * INTERVAL );
+					} catch(InterruptedException ie) {
+						Thread.currentThread().interrupt();
+					}
+
 					System.out.print("x");
 					// notify.fail(item);
 					continue;
