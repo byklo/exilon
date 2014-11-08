@@ -7,15 +7,20 @@ public class FinancialAdvisor {
 
 	private int DATAPOINTS;
 
+	private MathContext mc = new MathContext(6);
+
 	private BigDecimal currentPrice;
 	private int dataSize;
 	
+	private BigDecimal breakEven;
+
 	private BigDecimal averageRawValue;
 	private BigDecimal averageRealValue;
 	
 	private BigDecimal potentialProfit;
 	private BigDecimal yieldOnCost;
 
+	private BigDecimal deltaBreakEven;
 	private BigDecimal deltaRaw;
 	private BigDecimal deltaReal;
 
@@ -42,13 +47,15 @@ public class FinancialAdvisor {
 		this.averageRawValue = this.getAverage(raws);
 		this.averageRealValue = this.getAverage(real);
 
+		this.breakEven = this.currentPrice.multiply(new BigDecimal(1.15), this.mc).setScale(2, RoundingMode.HALF_EVEN);
+
+		this.deltaBreakEven = this.averageRawValue.subtract(this.breakEven);
 		this.deltaRaw = this.averageRawValue.subtract(this.currentPrice);
 		this.deltaReal = this.averageRealValue.subtract(this.currentPrice);
 
-		this.potentialProfit = this.averageRealValue.subtract(this.currentPrice);
+		this.potentialProfit = this.averageRealValue.subtract(this.currentPrice, this.mc);
 
-		MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
-		this.yieldOnCost = this.potentialProfit.divide(this.currentPrice, mc);
+		this.yieldOnCost = this.potentialProfit.divide(this.currentPrice, this.mc);
 
 		this.wantedYield = wantedYield;
 		this.wantedProfit = wantedProfit;
@@ -73,19 +80,21 @@ public class FinancialAdvisor {
 
 			// System.out.print(value.get(i) + " ");
 
-			temp = temp.add(value.get(i));
+			temp = temp.add(value.get(i), this.mc);
 		}
 
 		// System.out.print(") by " + new BigDecimal(this.dataSize));
 		// System.out.println("");
 
-		MathContext mc = new MathContext(4);
-
-		return temp.divide(new BigDecimal(this.dataSize), mc);
+		return temp.divide(new BigDecimal(this.dataSize), this.mc).setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	BigDecimal getCurrentPrice() {
 		return this.currentPrice;
+	}
+
+	BigDecimal getBreakEven() {
+		return this.breakEven;
 	}
 
 	BigDecimal getAverageRawValue() {
@@ -101,7 +110,15 @@ public class FinancialAdvisor {
 	}
 
 	String getYieldOnCost() {
-		return this.yieldOnCost.multiply(new BigDecimal(100)) + "%";
+		return this.yieldOnCost.multiply(new BigDecimal(100.00), this.mc).setScale(2, RoundingMode.HALF_EVEN) + "%";
+	}
+
+	String getDeltaBreakEven() {
+		if(this.deltaBreakEven.compareTo(new BigDecimal(0)) > 0){
+			return "+" + this.deltaBreakEven;
+		}else{
+			return "-" + this.deltaBreakEven;
+		}
 	}
 
 	String getDeltaRaw() {
