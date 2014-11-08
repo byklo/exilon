@@ -17,8 +17,8 @@ public class Notifier {
 		System.out.println(item.model + "\t\t" + item.variant + "\t\t" + item.grade + "\t\t" + ( item.stattrak.matches("yes") ? "STATTRAK" : "" ) );
 		System.out.println("-------------------------------------------------------------------------");
 		System.out.println("Current Price:\t\t"		+ tips.getCurrentPrice());
-		System.out.println("Average Raw Value:\t"	+ tips.getAverageRawValue()		+ "\tDELTA\t" + tips.getDeltaRaw()		);
-		System.out.println("Average Real Value:\t"	+ tips.getAverageRealValue()	+ "\tDELTA\t" + tips.getDeltaReal()	);
+		System.out.println("Break-Even:\t\t"		+ tips.getBreakEven());
+		System.out.println("Market Value:\t\t"		+ tips.getAverageRawValue() + "\tDELTA\t" + tips.getDeltaBreakEven());
 	}
 
 	void deal(Item item, FinancialAdvisor tips) {
@@ -65,13 +65,20 @@ public class Notifier {
 
 			Message msg = new MimeMessage(session);
 
-			String content = "STOCKR";
+			String content = "";
+				content += item.model + " " + item.variant;
 				content += "\n";
-				content += item.model + " " + item.variant + " " + item.grade + ( item.stattrak.matches("yes") ? " STATTRAK" : "" );
+				content += item.grade + ( item.stattrak.matches("yes") ? " STATTRAK" : "" );
 				content += "\n";
-				content += "Potential Profit:\t"	+ tips.getPotentialProfit();
+				content += "Current: "		+ tips.getCurrentPrice();
 				content += "\n";
-				content += "Yield on Cost:\t\t"		+ tips.getYieldOnCost();
+				content += "BE: "		+ tips.getBreakEven();
+				content += "\n";
+				content += "MV: "		+ tips.getAverageRawValue();
+				content += "\n";
+				content += "PP: "		+ tips.getPotentialProfit();
+				content += "\n";
+				content += "YOC: "		+ tips.getYieldOnCost();
 
 			msg.setFrom(new InternetAddress(from));
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
