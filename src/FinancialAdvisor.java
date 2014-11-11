@@ -29,7 +29,7 @@ public class FinancialAdvisor {
 
 	private boolean shouldBuy;
 
-	public FinancialAdvisor(Prices prices, int size, BigDecimal wantedYield, BigDecimal wantedProfit) {
+	public FinancialAdvisor(Prices prices, int size, BigDecimal wantedYield, BigDecimal wantedProfit, BigDecimal wallet) {
 
 		this.DATAPOINTS = size;
 
@@ -60,13 +60,18 @@ public class FinancialAdvisor {
 		this.wantedYield = wantedYield;
 		this.wantedProfit = wantedProfit;
 
-		this.shouldBuy = this.judgeByPercentYield(wantedYield, wantedProfit);
+		this.shouldBuy = this.judgeByPercentYield(wantedYield, wantedProfit, wallet);
 
 	}
 
-	boolean judgeByPercentYield(BigDecimal wantedYield, BigDecimal wantedProfit) {
+	boolean judgeByPercentYield(BigDecimal wantedYield, BigDecimal wantedProfit, BigDecimal wallet) {
 
-		return this.yieldOnCost.compareTo(wantedYield) > 0 && this.potentialProfit.compareTo(wantedProfit) > 0 ;
+		return	this.yieldOnCost.compareTo(wantedYield) > 0
+					&&
+				this.potentialProfit.compareTo(wantedProfit) > 0 
+					&&
+				this.currentPrice.compareTo(wallet) < 0
+				;
 	}
 
 	BigDecimal getAverage(ArrayList<BigDecimal> value) {

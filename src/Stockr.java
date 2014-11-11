@@ -6,6 +6,7 @@ public class Stockr {
 	public static void main (String[] args) {
 
 		// CONFIG
+		BigDecimal	WALLET			=	new BigDecimal(120);
 		BigDecimal	WANTEDYIELD		=	new BigDecimal(0.05);
 		BigDecimal	WANTEDPROFIT	=	new BigDecimal(0.5);
 		int 		LISTINGCOUNT	=	3;
@@ -35,7 +36,7 @@ public class Stockr {
 				try {
 					itemPrices = alfred.getPrices(item, LISTINGCOUNT);
 					
-					FinancialAdvisor tips = new FinancialAdvisor(itemPrices, LISTINGCOUNT, WANTEDYIELD, WANTEDPROFIT);
+					FinancialAdvisor tips = new FinancialAdvisor(itemPrices, LISTINGCOUNT, WANTEDYIELD, WANTEDPROFIT, WALLET);
 
 					if(tips.decide()){
 						notify.deal(item, tips);
@@ -59,7 +60,7 @@ public class Stockr {
 					System.out.print("x");
 
 					try {
-						Thread.sleep( 5 * INTERVAL );
+						Thread.sleep( 4 * INTERVAL );
 					} catch(InterruptedException ie) {
 						Thread.currentThread().interrupt();
 					}
