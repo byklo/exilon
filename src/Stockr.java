@@ -22,12 +22,14 @@ public class Stockr {
 		}
 
 		ListParser lp = new ListParser();
-		ArrayList<Item> items = lp.parse(LISTFILE);
+		ArrayList<Item> items;
 		Scraper alfred = new Scraper();
 		Notifier notify = new Notifier();
 		int runtimes = 0;
 
 		do {
+
+			items = lp.parse(LISTFILE);
 
 			for (Item item : items) {
 
