@@ -41,8 +41,8 @@ public class Notifier {
 
 	void text(Item item, FinancialAdvisor tips) {
 
-		final String to		= "4169936118@txt.bell.ca";
-		final String from	= "stockr.ae@gmail.com";
+		final String to		= "NUMBER@txt.bell.ca";
+		final String from	= "EMAIL@gmail.com";
 		final String pswd	= "isthisevenapassword";
 
 		String host = "smtp.gmail.com";
